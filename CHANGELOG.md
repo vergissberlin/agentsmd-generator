@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/vergissberlin/agentsmd-generator/compare/agentsmd-generator-v1.1.0...agentsmd-generator-v1.1.1) (2026-04-14)
+
+
+### Bug Fixes
+
+* update GitHub workflows for deployment and permissions ([c954fca](https://github.com/vergissberlin/agentsmd-generator/commit/c954fca8a273fe138e945f377fe0be825a5d8a9e))
+
 ## [1.1.0](https://github.com/vergissberlin/agentsmd-generator/compare/agentsmd-generator-v1.0.0...agentsmd-generator-v1.1.0) (2026-04-14)
 
 
