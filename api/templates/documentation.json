@@ -1,0 +1,25 @@
+{
+  "id": "documentation",
+  "name": "Documentation",
+  "description": "Documentation standards covering code comments, READMEs, changelogs, and API docs.",
+  "category": "quality",
+  "icon": "file-text",
+  "tags": ["documentation", "readme", "comments", "jsdoc", "openapi"],
+  "sections": [
+    {
+      "id": "documentation-code-comments",
+      "title": "Code Comment Standards",
+      "content": "## Code Comment Standards\n\n### When to Comment\n\nWrite comments to explain **why**, not **what**. The code explains what; comments explain intent, trade-offs, and non-obvious decisions.\n\n**Good comment:**\n```js\n// Use a 3-second debounce here instead of cancelling immediately because\n// the analytics service batches events and premature cancellation causes\n// duplicate billing events (see incident INC-2024-04-12).\nconst debouncedTrack = debounce(track, 3000);\n```\n\n**Bad comment:**\n```js\n// Increment counter by 1\ncounter++;\n```\n\n### JSDoc / Docstrings\n\n- All public functions, classes, and methods must have a docstring.\n- Include `@param`, `@returns`, `@throws`, and `@example` where applicable.\n- For TypeScript, docstrings complement (not replace) type signatures.\n- Update docstrings when function behaviour changes — outdated docs are worse than none.\n\n### TODO / FIXME Comments\n\n- `// TODO(username): description` — future improvement; include a ticket number if one exists.\n- `// FIXME(username): description` — known bug; must be linked to an open issue.\n- Never commit a `// HACK` or `// XXX` without a linked issue explaining the root cause and remediation plan.\n- Automated tooling should report the count of TODOs/FIXMEs on each PR to prevent accumulation."
+    },
+    {
+      "id": "documentation-readme",
+      "title": "README Standards",
+      "content": "## README Standards\n\n### Required Sections\n\nEvery repository README must contain:\n\n1. **Project Name & Description** — one-paragraph summary of what the project does and who it is for\n2. **Badges** — build status, coverage, latest release, license\n3. **Getting Started** — prerequisites, installation steps, and a \"hello world\" example that actually works\n4. **Usage** — key use cases with code examples\n5. **Configuration** — environment variables and configuration file options, in a table\n6. **Contributing** — link to `CONTRIBUTING.md` or inline contribution guide\n7. **License** — SPDX identifier and link to `LICENSE` file\n\n### Maintenance Rules\n\n- Update the README in the same PR that changes behaviour — never in a follow-up.\n- Code examples in the README are executable. CI should verify them with `doctest` or a smoke test.\n- Keep the Getting Started section under 10 steps. If more is needed, link to detailed documentation.\n\n### CHANGELOG\n\n- Maintain a `CHANGELOG.md` following [Keep a Changelog](https://keepachangelog.com/) format.\n- Sections per release: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.\n- Every PR that affects users (not purely internal refactors) must add a `CHANGELOG` entry under `[Unreleased]`.\n- Automate release notes generation from the CHANGELOG using tools like `release-please` or `semantic-release`."
+    },
+    {
+      "id": "documentation-api-docs",
+      "title": "API Documentation Standards",
+      "content": "## API Documentation Standards\n\n### OpenAPI / AsyncAPI\n\n- All HTTP APIs must be documented with an **OpenAPI 3.1** specification (`openapi.yaml` or `openapi.json` at the repo root).\n- Event-driven APIs must be documented with **AsyncAPI 2.x**.\n- The spec file is the source of truth — generate server stubs and client SDKs from it, not the other way around.\n- Validate the spec in CI using `spectral lint` with the official OpenAPI ruleset.\n\n### Required OpenAPI Fields\n\nFor every endpoint:\n- `summary` and `description`\n- All path, query, and header parameters with descriptions and examples\n- All request body schemas with field descriptions\n- All response codes (including `4xx` and `5xx`) with schemas\n- At least one `example` per request/response schema\n- `security` field to document authentication requirements\n\n### Keeping Docs in Sync\n\n- Generate API docs from code annotations (e.g., `swagger-jsdoc`, FastAPI auto-docs) where possible.\n- Add a CI check that diffs the committed `openapi.yaml` against the auto-generated version and fails if they differ.\n- Publish live interactive docs (Swagger UI, Redoc) to a `/docs` endpoint in non-production environments."
+    }
+  ]
+}

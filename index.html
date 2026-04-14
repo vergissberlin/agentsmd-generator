@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGENTS.md Generator</title>
+  <meta name="description" content="Generate production-quality AGENTS.md files for your AI coding agents using a visual wizard." />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:  '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            },
+          },
+          animation: {
+            'fade-in':    'fadeIn .35s ease both',
+            'slide-up':   'slideUp .35s ease both',
+            'slide-down': 'slideDown .25s ease both',
+            'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeIn:    { from: { opacity: 0 }, to: { opacity: 1 } },
+            slideUp:   { from: { opacity: 0, transform: 'translateY(16px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+            slideDown: { from: { opacity: 0, transform: 'translateY(-8px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+            pulseSoft: { '0%,100%': { opacity: 1 }, '50%': { opacity: .6 } },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #a5b4fc; border-radius: 999px; }
+    .dark ::-webkit-scrollbar-thumb { background: #4338ca; }
+
+    /* Markdown preview */
+    #md-preview { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+    #md-preview h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem; border-bottom: 2px solid currentColor; padding-bottom: .25rem; }
+    #md-preview h2 { font-size: 1.15rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: .4rem; }
+    #md-preview h3 { font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: .3rem; }
+    #md-preview p  { margin-bottom: .6rem; line-height: 1.65; }
+    #md-preview ul,#md-preview ol { padding-left: 1.25rem; margin-bottom: .6rem; }
+    #md-preview li { margin-bottom: .2rem; }
+    #md-preview code { background: rgba(99,102,241,.15); border-radius: 3px; padding: 1px 4px; font-size: .88em; }
+    #md-preview pre  { background: rgba(99,102,241,.08); border-radius: 6px; padding: .75rem 1rem; overflow-x: auto; margin-bottom: .75rem; }
+    #md-preview pre code { background: transparent; padding: 0; }
+    #md-preview blockquote { border-left: 3px solid #818cf8; padding-left: .75rem; opacity: .75; margin-bottom: .6rem; }
+    #md-preview table { border-collapse: collapse; width: 100%; margin-bottom: .75rem; }
+    #md-preview th,#md-preview td { border: 1px solid rgba(99,102,241,.25); padding: .35rem .6rem; text-align: left; font-size: .88rem; }
+    #md-preview th { background: rgba(99,102,241,.1); font-weight: 600; }
+    #md-preview hr { border: none; border-top: 1px solid rgba(99,102,241,.2); margin: 1rem 0; }
+    #md-preview strong { font-weight: 700; }
+
+    /* Card hover ring */
+    .template-card { transition: transform .18s ease, box-shadow .18s ease; }
+    .template-card:hover { transform: translateY(-2px); }
+    .template-card.selected { outline: 2px solid #6366f1; }
+    .dark .template-card.selected { outline: 2px solid #818cf8; }
+
+    /* Step indicator active */
+    .step-dot.active  { background: #6366f1; color: #fff; }
+    .step-dot.done    { background: #4f46e5; color: #fff; }
+    .step-dot.pending { background: #e0e7ff; color: #6366f1; }
+    .dark .step-dot.pending { background: #312e81; color: #a5b4fc; }
+
+    /* Toast */
+    #toast { transition: opacity .3s ease, transform .3s ease; }
+    #toast.hidden { opacity: 0; transform: translateY(10px); pointer-events: none; }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+<!-- ═══════════════════════════════════════════ HEADER ═══════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-800 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-3 group" aria-label="AGENTS.md Generator home">
+      <img src="assets/logo.svg" alt="Logo" class="w-10 h-10 drop-shadow group-hover:scale-105 transition-transform" />
+      <div class="leading-tight">
+        <span class="font-bold text-lg text-brand-600 dark:text-brand-400 tracking-tight">AGENTS.md</span>
+        <span class="hidden sm:inline font-semibold text-lg text-slate-700 dark:text-slate-300"> Generator</span>
+        <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Build AI agent guidelines visually</p>
+      </div>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <a href="https://github.com" target="_blank" rel="noopener" class="text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors" aria-label="GitHub">
+        <i class="ti ti-brand-github text-xl"></i>
+      </a>
+      <!-- Dark mode toggle -->
+      <button id="theme-toggle" aria-label="Toggle dark mode"
+        class="relative flex items-center w-14 h-7 rounded-full bg-slate-200 dark:bg-brand-700 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+        <span class="absolute left-1 dark:translate-x-7 w-5 h-5 rounded-full bg-white dark:bg-brand-300 shadow transition-transform duration-300 flex items-center justify-center">
+          <i class="ti ti-sun text-yellow-500 dark:hidden text-xs"></i>
+          <i class="ti ti-moon text-brand-600 hidden dark:block text-xs"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ HERO ════════════════════════════════════════════ -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6 animate-fade-in">
+  <div class="text-center max-w-2xl mx-auto">
+    <h1 class="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-brand-500 to-purple-500 bg-clip-text text-transparent mb-3">
+      Build your AGENTS.md
+    </h1>
+    <p class="text-slate-600 dark:text-slate-300 text-lg">
+      Select templates, preview the result live, and export a production-ready
+      <code class="bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-300 px-1.5 py-0.5 rounded text-base">AGENTS.md</code>
+      in seconds.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ TABS ════════════════════════════════════════════ -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 mb-6 animate-slide-up" style="animation-delay:.05s">
+  <div class="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-fit">
+    <button data-tab="wizard" class="tab-btn active px-5 py-2 rounded-lg text-sm font-semibold transition-all">
+      <i class="ti ti-wand mr-1.5"></i>Wizard
+    </button>
+    <button data-tab="examples" class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all">
+      <i class="ti ti-bookmark mr-1.5"></i>Examples
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ WIZARD TAB ══════════════════════════════════════ -->
+<main id="tab-wizard" class="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+
+  <!-- Step indicator -->
+  <div class="flex items-center gap-0 mb-8 animate-slide-up" style="animation-delay:.1s" aria-label="Wizard steps">
+    <div class="flex items-center gap-2" data-step-indicator="1">
+      <div class="step-dot active w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center select-none transition-all">1</div>
+      <span class="text-sm font-medium text-brand-600 dark:text-brand-400 hidden sm:block">Choose Templates</span>
+    </div>
+    <div class="flex-1 h-px bg-slate-300 dark:bg-slate-700 mx-2 max-w-16"></div>
+    <div class="flex items-center gap-2" data-step-indicator="2">
+      <div class="step-dot pending w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center select-none transition-all">2</div>
+      <span class="text-sm font-medium text-slate-400 dark:text-slate-500 hidden sm:block">Preview</span>
+    </div>
+    <div class="flex-1 h-px bg-slate-300 dark:bg-slate-700 mx-2 max-w-16"></div>
+    <div class="flex items-center gap-2" data-step-indicator="3">
+      <div class="step-dot pending w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center select-none transition-all">3</div>
+      <span class="text-sm font-medium text-slate-400 dark:text-slate-500 hidden sm:block">Export</span>
+    </div>
+  </div>
+
+  <!-- Two-column layout: cards left, preview right -->
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+    <!-- ── Left: template cards ── -->
+    <div class="lg:col-span-3 space-y-6">
+
+      <!-- Search / filter -->
+      <div class="relative animate-slide-up" style="animation-delay:.12s">
+        <i class="ti ti-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+        <input id="search-input" type="search" placeholder="Search templates…"
+          class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 transition" />
+      </div>
+
+      <!-- Category filter pills -->
+      <div id="category-filters" class="flex flex-wrap gap-2 animate-slide-up" style="animation-delay:.15s" role="group" aria-label="Filter by category">
+        <button data-cat="all" class="cat-pill active px-3 py-1 rounded-full text-xs font-semibold border transition-all">All</button>
+        <button data-cat="development" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+          <i class="ti ti-code mr-1"></i>Development
+        </button>
+        <button data-cat="infrastructure" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+          <i class="ti ti-cloud mr-1"></i>Infrastructure
+        </button>
+        <button data-cat="quality" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+          <i class="ti ti-star mr-1"></i>Quality
+        </button>
+        <button data-cat="security" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+          <i class="ti ti-shield mr-1"></i>Security
+        </button>
+      </div>
+
+      <!-- Template grid -->
+      <div id="template-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list" aria-label="Template blocks">
+        <!-- Cards injected by JS -->
+        <div class="sm:col-span-2 text-center py-10 text-slate-400 animate-pulse-soft" id="loading-indicator">
+          <i class="ti ti-loader-2 text-3xl block mb-2 animate-spin"></i>
+          Loading templates…
+        </div>
+      </div>
+
+      <!-- Selection summary bar -->
+      <div id="selection-bar" class="hidden sticky bottom-4 bg-brand-600 dark:bg-brand-700 text-white rounded-2xl px-5 py-3 shadow-lg flex items-center justify-between gap-3 animate-slide-up">
+        <span id="selection-count" class="font-semibold text-sm"></span>
+        <div class="flex gap-2">
+          <button id="btn-clear" class="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-xs font-semibold transition" aria-label="Clear all selections">
+            Clear
+          </button>
+          <button id="btn-export-jump" class="px-4 py-1.5 rounded-lg bg-white text-brand-700 hover:bg-brand-50 text-xs font-bold transition flex items-center gap-1.5">
+            <i class="ti ti-download"></i>Export
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Right: live preview ── -->
+    <div class="lg:col-span-2 animate-slide-up" style="animation-delay:.2s">
+      <div class="sticky top-20 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col" style="max-height:80vh">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <h2 class="text-sm font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2">
+            <i class="ti ti-eye text-brand-500"></i>Live Preview
+          </h2>
+          <div class="flex items-center gap-2">
+            <button id="preview-toggle" class="text-xs text-slate-400 hover:text-brand-500 transition flex items-center gap-1" aria-label="Toggle raw/rendered preview">
+              <i class="ti ti-code"></i><span>Raw</span>
+            </button>
+          </div>
+        </div>
+        <div id="preview-container" class="overflow-y-auto flex-1 p-4 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+          <div id="md-preview" class="prose-sm"></div>
+          <pre id="raw-preview" class="hidden whitespace-pre-wrap font-mono text-xs"></pre>
+          <div id="preview-empty" class="flex flex-col items-center justify-center h-40 text-slate-400 text-center">
+            <i class="ti ti-file-text text-4xl mb-2 text-slate-300 dark:text-slate-700"></i>
+            <p class="text-sm">Select templates to see your<br/><strong>AGENTS.md</strong> preview</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- ═══ Step 3 – Export ═══ -->
+  <section id="export-section" class="mt-10 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 animate-slide-up" style="animation-delay:.25s">
+    <h2 class="text-lg font-bold mb-1 flex items-center gap-2">
+      <i class="ti ti-download text-brand-500"></i>Export Your AGENTS.md
+    </h2>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">Select at least one template above, then copy or download your file.</p>
+    <div class="flex flex-wrap gap-3">
+      <button id="btn-copy" disabled
+        class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm shadow transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400">
+        <i class="ti ti-copy"></i>Copy to Clipboard
+      </button>
+      <button id="btn-download" disabled
+        class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 dark:text-slate-200 font-semibold text-sm shadow transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400">
+        <i class="ti ti-file-download"></i>Download AGENTS.md
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════ EXAMPLES TAB ════════════════════════════════════ -->
+<div id="tab-examples" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold mb-1">Ready-made Examples</h2>
+    <p class="text-slate-500 dark:text-slate-400 text-sm">Click any example to load its AGENTS.md content into the preview, then customise and export.</p>
+  </div>
+  <div id="examples-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- Injected by JS -->
+    <div class="col-span-full text-center py-10 text-slate-400 animate-pulse-soft" id="examples-loading">
+      <i class="ti ti-loader-2 text-3xl block mb-2 animate-spin"></i>Loading examples…
+    </div>
+  </div>
+
+  <!-- Example preview modal -->
+  <div id="example-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col border border-slate-200 dark:border-slate-700">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+        <h3 id="modal-title" class="font-bold text-lg"></h3>
+        <button id="modal-close" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition" aria-label="Close">
+          <i class="ti ti-x text-xl"></i>
+        </button>
+      </div>
+      <div id="modal-body" class="overflow-y-auto flex-1 p-6 text-sm">
+        <div id="modal-preview" class="prose-sm text-slate-700 dark:text-slate-300"></div>
+      </div>
+      <div class="flex gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-800">
+        <button id="modal-copy" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold transition">
+          <i class="ti ti-copy"></i>Copy
+        </button>
+        <button id="modal-download" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold transition">
+          <i class="ti ti-file-download"></i>Download
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ TOAST ═══════════════════════════════════════════ -->
+<div id="toast" role="alert" aria-live="polite"
+  class="hidden fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-5 py-3 rounded-xl shadow-xl text-sm font-semibold max-w-xs">
+  <i id="toast-icon" class="ti ti-check text-green-400 dark:text-green-600 text-lg"></i>
+  <span id="toast-msg">Copied!</span>
+</div>
+
+<!-- ═══════════════════════════════════════════ FOOTER ══════════════════════════════════════════ -->
+<footer class="border-t border-slate-200 dark:border-slate-800 py-6 mt-4">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+    <span>AGENTS.md Generator — open source under MIT License</span>
+    <span>Built with Tailwind CSS &amp; Vanilla JS</span>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════ SCRIPTS ═════════════════════════════════════════ -->
+<script src="src/agentsmd-lib.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ──────────────────────────────── Dark mode ──────────────────────────────── */
+  const html = document.documentElement;
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) html.classList.add('dark');
+
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  /* ──────────────────────────────── Tab switching ─────────────────────────── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'text-brand-600', 'dark:text-brand-300');
+        b.classList.add('text-slate-500');
+      });
+      btn.classList.add('active', 'bg-white', 'dark:bg-slate-700', 'shadow', 'text-brand-600', 'dark:text-brand-300');
+      btn.classList.remove('text-slate-500');
+
+      const t = btn.dataset.tab;
+      document.getElementById('tab-wizard').classList.toggle('hidden', t !== 'wizard');
+      document.getElementById('tab-examples').classList.toggle('hidden', t !== 'examples');
+    });
+  });
+  // Set initial tab styles
+  document.querySelector('.tab-btn[data-tab="wizard"]')
+    .classList.add('bg-white', 'dark:bg-slate-700', 'shadow', 'text-brand-600', 'dark:text-brand-300');
+
+  /* ──────────────────────────────── Toast helper ───────────────────────────── */
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    const icon  = document.getElementById('toast-icon');
+    document.getElementById('toast-msg').textContent = msg;
+    icon.className = `ti ti-${type === 'error' ? 'alert-circle text-red-400' : 'check text-green-400'} text-lg`;
+    toast.classList.remove('hidden');
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      setTimeout(() => toast.classList.add('hidden'), 300);
+    }, 2800);
+  }
+
+  /* ──────────────────────────────── Simple Markdown renderer ─────────────── */
+  function renderMarkdown(md) {
+    if (!md) return '';
+    let html = md
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      // Code blocks
+      .replace(/```[\w]*\n([\s\S]*?)```/g, (_,c) => `<pre><code>${c.trim()}</code></pre>`)
+      // Inline code
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      // Headings
+      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+      // Bold / italic
+      .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      // Blockquote
+      .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+      // HR
+      .replace(/^---$/gm, '<hr/>')
+      // Tables (simple)
+      .replace(/^\|(.+)\|$/gm, (row) => {
+        const cells = row.slice(1,-1).split('|').map(c=>c.trim());
+        return '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+      })
+      .replace(/(<tr>[\s\S]*?<\/tr>)/g, (t, rows) => {
+        // Wrap in table; first row → thead if next line is separator (handled below)
+        return `<table>${rows}</table>`;
+      })
+      // Lists
+      .replace(/^(\s*)- (.+)$/gm, '$1<li>$2</li>')
+      .replace(/^(\s*)\d+\. (.+)$/gm, '$1<li>$2</li>')
+      // Wrap consecutive <li>
+      .replace(/(<li>[\s\S]*?<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+      // Paragraphs
+      .replace(/\n\n+/g, '</p><p>')
+      // Line breaks
+      .replace(/\n/g, '<br/>');
+
+    return `<p>${html}</p>`;
+  }
+
+  /* ──────────────────────────────── Preview update ───────────────────────── */
+  let previewRaw = false;
+
+  function updatePreview() {
+    const blocks = AgentsMDLib.getSelectedBlocks();
+    const md = AgentsMDLib.generateAgentsMD(blocks);
+    const isEmpty = blocks.length === 0;
+
+    document.getElementById('preview-empty').style.display = isEmpty ? 'flex' : 'none';
+    document.getElementById('md-preview').style.display = (!isEmpty && !previewRaw) ? 'block' : 'none';
+    document.getElementById('raw-preview').style.display = (!isEmpty && previewRaw) ? 'block' : 'none';
+
+    document.getElementById('md-preview').innerHTML = renderMarkdown(md);
+    document.getElementById('raw-preview').textContent = md;
+
+    const hasContent = blocks.length > 0;
+    document.getElementById('btn-copy').disabled = !hasContent;
+    document.getElementById('btn-download').disabled = !hasContent;
+
+    // Update step indicators
+    updateStepIndicators(blocks.length);
+    updateSelectionBar(blocks.length);
+  }
+
+  document.getElementById('preview-toggle').addEventListener('click', function() {
+    previewRaw = !previewRaw;
+    this.querySelector('span').textContent = previewRaw ? 'Rendered' : 'Raw';
+    updatePreview();
+  });
+
+  function updateStepIndicators(count) {
+    const s1 = document.querySelector('[data-step-indicator="1"] .step-dot');
+    const s2 = document.querySelector('[data-step-indicator="2"] .step-dot');
+    const s3 = document.querySelector('[data-step-indicator="3"] .step-dot');
+    const s2label = document.querySelector('[data-step-indicator="2"] span');
+    const s3label = document.querySelector('[data-step-indicator="3"] span');
+
+    if (count > 0) {
+      s1.classList.replace('active','done');
+      s2.className = 'step-dot active w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center select-none transition-all';
+      s2label && s2label.classList.replace('text-slate-400','text-brand-600');
+      s2label && s2label.classList.replace('dark:text-slate-500','dark:text-brand-400');
+    } else {
+      s1.className = 'step-dot active w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center select-none transition-all';
+      ['s2','s3'].forEach((_, i) => {
+        const el = [s2,s3][i];
+        const lbl = [s2label,s3label][i];
+        el.className = 'step-dot pending w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center select-none transition-all';
+        lbl && lbl.classList.replace('text-brand-600','text-slate-400');
+        lbl && lbl.classList.replace('dark:text-brand-400','dark:text-slate-500');
+      });
+    }
+  }
+
+  function updateSelectionBar(count) {
+    const bar = document.getElementById('selection-bar');
+    const label = document.getElementById('selection-count');
+    if (count > 0) {
+      bar.classList.remove('hidden');
+      label.textContent = `${count} template${count === 1 ? '' : 's'} selected`;
+    } else {
+      bar.classList.add('hidden');
+    }
+  }
+
+  /* ──────────────────────────────── Category icons map ───────────────────── */
+  const CAT_ICONS = {
+    development:    'ti-code',
+    infrastructure: 'ti-cloud',
+    quality:        'ti-star',
+    security:       'ti-shield-lock',
+  };
+  const CAT_COLORS = {
+    development:    'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
+    infrastructure: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
+    quality:        'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
+    security:       'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400',
+  };
+
+  /* ──────────────────────────────── Render template cards ────────────────── */
+  let allTemplates = [];
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  function renderCards() {
+    const grid = document.getElementById('template-grid');
+    const filtered = allTemplates.filter(t => {
+      const matchesCat = activeCategory === 'all' || t.category === activeCategory;
+      const q = searchQuery.toLowerCase();
+      const matchesSearch = !q ||
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q) ||
+        (t.tags || []).some(tag => tag.toLowerCase().includes(q));
+      return matchesCat && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="sm:col-span-2 text-center py-10 text-slate-400">No templates match your search.</div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map((t, i) => {
+      const selected = AgentsMDLib.isSelected(t.id);
+      const catColor = CAT_COLORS[t.category] || 'bg-slate-50 text-slate-500';
+      const iconClass = `ti-${t.icon || 'file'}`;
+      const delay = `${i * 40}ms`;
+      return `
+        <div role="listitem" class="template-card${selected ? ' selected' : ''} bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 cursor-pointer shadow-sm hover:shadow-md animate-slide-up focus-within:ring-2 focus-within:ring-brand-400"
+          style="animation-delay:${delay}" data-template-id="${t.id}" tabindex="0" aria-pressed="${selected}" aria-label="${t.name}">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-10 h-10 rounded-lg ${catColor} flex items-center justify-center text-xl">
+              <i class="ti ${iconClass}"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="font-semibold text-sm text-slate-800 dark:text-slate-100 leading-tight">${escapeHtml(t.name)}</h3>
+                <div class="flex-shrink-0 w-5 h-5 rounded border-2 ${selected ? 'bg-brand-600 border-brand-600' : 'border-slate-300 dark:border-slate-600'} flex items-center justify-center transition-all">
+                  ${selected ? '<i class="ti ti-check text-white" style="font-size:11px"></i>' : ''}
+                </div>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${escapeHtml(t.description)}</p>
+              <div class="flex flex-wrap gap-1 mt-2">
+                ${(t.tags||[]).slice(0,3).map(tag =>
+                  `<span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 text-xs">${escapeHtml(tag)}</span>`
+                ).join('')}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Attach click handlers
+    grid.querySelectorAll('.template-card').forEach(card => {
+      card.addEventListener('click', () => onCardClick(card));
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCardClick(card); }});
+    });
+  }
+
+  async function onCardClick(card) {
+    const id = card.dataset.templateId;
+    let templateData = AgentsMDLib._state.loadedTemplates[id];
+    if (!templateData) {
+      try {
+        templateData = await AgentsMDLib.loadTemplate(id);
+      } catch (err) {
+        showToast('Failed to load template: ' + id, 'error');
+        return;
+      }
+    }
+    const nowSelected = AgentsMDLib.toggleBlock(templateData);
+    card.classList.toggle('selected', nowSelected);
+    card.setAttribute('aria-pressed', String(nowSelected));
+    // Update checkbox visually
+    const chk = card.querySelector('.flex-shrink-0.w-5');
+    if (nowSelected) {
+      chk.classList.add('bg-brand-600', 'border-brand-600');
+      chk.classList.remove('border-slate-300', 'dark:border-slate-600');
+      chk.innerHTML = '<i class="ti ti-check text-white" style="font-size:11px"></i>';
+    } else {
+      chk.classList.remove('bg-brand-600', 'border-brand-600');
+      chk.classList.add('border-slate-300', 'dark:border-slate-600');
+      chk.innerHTML = '';
+    }
+    updatePreview();
+  }
+
+  /* ──────────────────────────────── Category filter ───────────────────────── */
+  document.getElementById('category-filters').addEventListener('click', e => {
+    const pill = e.target.closest('.cat-pill');
+    if (!pill) return;
+    activeCategory = pill.dataset.cat;
+    document.querySelectorAll('.cat-pill').forEach(p => {
+      p.classList.toggle('active', p === pill);
+      p.classList.toggle('bg-brand-600', p === pill);
+      p.classList.toggle('text-white', p === pill);
+      p.classList.toggle('border-brand-600', p === pill);
+      p.classList.toggle('border-slate-200', p !== pill);
+      p.classList.toggle('dark:border-slate-700', p !== pill);
+      p.classList.toggle('text-slate-600', p !== pill);
+      p.classList.toggle('dark:text-slate-300', p !== pill);
+    });
+    renderCards();
+  });
+  // Set initial pill styles
+  document.querySelector('.cat-pill[data-cat="all"]').classList.add('bg-brand-600','text-white','border-brand-600');
+
+  /* ──────────────────────────────── Search ────────────────────────────────── */
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = e.target.value;
+      renderCards();
+    }, 200);
+  });
+
+  /* ──────────────────────────────── Load templates ───────────────────────── */
+  async function loadTemplates() {
+    try {
+      const index = await AgentsMDLib.loadAllTemplates();
+      allTemplates = index.templates || [];
+      document.getElementById('loading-indicator').remove();
+      renderCards();
+    } catch (err) {
+      document.getElementById('loading-indicator').innerHTML =
+        '<i class="ti ti-alert-circle text-red-400 text-2xl mb-2 block"></i>Failed to load templates. Are you running a local server?';
+    }
+  }
+
+  /* ──────────────────────────────── Clear & export ─────────────────────────── */
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    AgentsMDLib.clearBlocks();
+    renderCards();
+    updatePreview();
+  });
+
+  document.getElementById('btn-export-jump').addEventListener('click', () => {
+    document.getElementById('export-section').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  document.getElementById('btn-copy').addEventListener('click', async () => {
+    const md = AgentsMDLib.generateAgentsMD(AgentsMDLib.getSelectedBlocks());
+    try {
+      await navigator.clipboard.writeText(md);
+      showToast('Copied to clipboard!');
+    } catch {
+      showToast('Copy failed — try downloading instead.', 'error');
+    }
+  });
+
+  document.getElementById('btn-download').addEventListener('click', () => {
+    const md = AgentsMDLib.generateAgentsMD(AgentsMDLib.getSelectedBlocks());
+    downloadFile('AGENTS.md', md);
+    showToast('Downloaded AGENTS.md');
+  });
+
+  function downloadFile(filename, content) {
+    const blob = new Blob([content], { type: 'text/markdown' });
+    const url  = URL.createObjectURL(blob);
+    const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ──────────────────────────────── Examples tab ─────────────────────────── */
+  let currentExampleContent = '';
+
+  async function loadExamples() {
+    try {
+      const index = await AgentsMDLib.loadAllExamples();
+      const examples = index.examples || [];
+      const grid = document.getElementById('examples-grid');
+      document.getElementById('examples-loading').remove();
+
+      const EXAMPLE_ICONS = {
+        'fullstack-app':   'ti-stack-2',
+        'devops-pipeline': 'ti-settings-automation',
+        'secure-api':      'ti-shield-check',
+      };
+      const EXAMPLE_COLORS = {
+        'fullstack-app':   'from-blue-500 to-indigo-600',
+        'devops-pipeline': 'from-orange-400 to-amber-500',
+        'secure-api':      'from-emerald-500 to-teal-600',
+      };
+
+      grid.innerHTML = examples.map((ex, i) => `
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-md transition-all animate-slide-up cursor-pointer group"
+          style="animation-delay:${i*60}ms" data-example-id="${ex.id}">
+          <div class="bg-gradient-to-br ${EXAMPLE_COLORS[ex.id] || 'from-brand-500 to-purple-600'} h-2"></div>
+          <div class="p-5">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${EXAMPLE_COLORS[ex.id] || 'from-brand-500 to-purple-600'} flex items-center justify-center text-white text-xl shadow">
+                <i class="ti ${EXAMPLE_ICONS[ex.id] || 'ti-file-text'}"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${escapeHtml(ex.name)}</h3>
+                <p class="text-xs text-slate-400">${(ex.templates||[]).length} templates</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">${escapeHtml(ex.description)}</p>
+            <div class="flex flex-wrap gap-1 mb-4">
+              ${(ex.templates||[]).map(tid =>
+                `<span class="px-2 py-0.5 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs">${escapeHtml(tid)}</span>`
+              ).join('')}
+            </div>
+            <button class="w-full py-2 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 text-slate-600 dark:text-slate-300 text-xs font-semibold transition-all flex items-center justify-center gap-1.5">
+              <i class="ti ti-eye"></i>View Example
+            </button>
+          </div>
+        </div>`).join('');
+
+      grid.querySelectorAll('[data-example-id]').forEach(card => {
+        card.addEventListener('click', () => openExampleModal(card.dataset.exampleId));
+      });
+    } catch (err) {
+      document.getElementById('examples-loading').innerHTML =
+        '<i class="ti ti-alert-circle text-red-400 text-2xl mb-2 block"></i>Failed to load examples.';
+    }
+  }
+
+  async function openExampleModal(id) {
+    const modal = document.getElementById('example-modal');
+    const title = document.getElementById('modal-title');
+    const preview = document.getElementById('modal-preview');
+
+    title.textContent = 'Loading…';
+    preview.innerHTML = '<div class="animate-pulse-soft text-slate-400 text-center py-8"><i class="ti ti-loader-2 animate-spin text-3xl"></i></div>';
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    try {
+      const example = await AgentsMDLib.loadExample(id);
+      title.textContent = example.name;
+      currentExampleContent = example.content || '';
+      preview.innerHTML = renderMarkdown(currentExampleContent);
+    } catch (err) {
+      preview.innerHTML = '<p class="text-red-400">Failed to load example.</p>';
+    }
+  }
+
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('example-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('example-modal')) closeModal();
+  });
+
+  function closeModal() {
+    document.getElementById('example-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+    currentExampleContent = '';
+  }
+
+  document.getElementById('modal-copy').addEventListener('click', async () => {
+    if (!currentExampleContent) return;
+    try {
+      await navigator.clipboard.writeText(currentExampleContent);
+      showToast('Copied!');
+    } catch { showToast('Copy failed', 'error'); }
+  });
+
+  document.getElementById('modal-download').addEventListener('click', () => {
+    if (!currentExampleContent) return;
+    downloadFile('AGENTS.md', currentExampleContent);
+    showToast('Downloaded!');
+  });
+
+  /* ──────────────────────────────── Escape helper ────────────────────────── */
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  /* ──────────────────────────────── Keyboard shortcut ────────────────────── */
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      document.getElementById('search-input').focus();
+    }
+    if (e.key === 'Escape') {
+      if (!document.getElementById('example-modal').classList.contains('hidden')) closeModal();
+    }
+  });
+
+  /* ──────────────────────────────── Init ─────────────────────────────────── */
+  loadTemplates();
+  loadExamples();
+  updatePreview();
+
+})();
+</script>
+</body>
+</html>

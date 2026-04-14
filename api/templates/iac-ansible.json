@@ -1,0 +1,25 @@
+{
+  "id": "iac-ansible",
+  "name": "Infrastructure as Code — Ansible",
+  "description": "Ansible playbook conventions, idempotency rules, inventory management, and secrets handling.",
+  "category": "infrastructure",
+  "icon": "adjustments",
+  "tags": ["ansible", "iac", "automation", "devops", "configuration"],
+  "sections": [
+    {
+      "id": "ansible-playbooks",
+      "title": "Ansible Playbook Conventions",
+      "content": "## Ansible Playbook Conventions\n\n### Directory Structure\n\nFollow the official Ansible best-practice layout:\n\n```\nansible/\n├── inventories/\n│   ├── production/\n│   │   ├── hosts.yml\n│   │   └── group_vars/\n│   └── staging/\n│       ├── hosts.yml\n│       └── group_vars/\n├── roles/\n│   ├── common/\n│   ├── webserver/\n│   └── database/\n├── playbooks/\n│   ├── site.yml\n│   ├── webservers.yml\n│   └── databases.yml\n├── ansible.cfg\n└── requirements.yml\n```\n\n### Playbook Rules\n\n1. **Idempotency is mandatory.** Every task must be safe to run multiple times. Use `state:` parameters, `creates:`, or `when:` guards to ensure this.\n2. One playbook, one concern. Do not write a single playbook that configures ten different services.\n3. Use **roles** for any logic that spans more than one playbook or host group.\n4. Always set `become: false` at the play level and use `become: true` only at the task level where root is actually required.\n5. Pin Ansible collection versions in `requirements.yml`. Run `ansible-galaxy install -r requirements.yml` in CI.\n6. Use `tags:` on tasks and plays so that subsets can be executed in isolation.\n\n### Task Writing\n\n- Prefer Ansible built-in modules over `shell:` or `command:`. Built-in modules are idempotent; shell commands usually are not.\n- When `shell:` or `command:` is unavoidable, add `changed_when: false` (if it never changes state) or a meaningful `changed_when` expression.\n- Always include a `name:` for every task — use imperative sentences: \"Ensure nginx is installed\".\n- Use `block:` / `rescue:` / `always:` for error handling in complex task sequences."
+    },
+    {
+      "id": "ansible-variables",
+      "title": "Ansible Variable Management",
+      "content": "## Ansible Variable Management\n\n### Variable Precedence & Organisation\n\nUse Ansible's variable precedence intentionally:\n\n| Source | Precedence | Use For |\n|--------|-----------|--------|\n| `defaults/main.yml` in roles | Lowest | Safe defaults anyone can override |\n| `group_vars/all/` | Low | Org-wide defaults |\n| `group_vars/{group}/` | Medium | Environment/group-specific values |\n| `host_vars/{host}/` | High | Host-specific overrides |\n| Extra vars (`-e`) | Highest | CI/CD pipeline injections only |\n\n### Naming Conventions\n\n- Role variables: `rolename_variable_name` (prefix with role name to avoid collisions)\n- Boolean variables: use `true`/`false` (not `yes`/`no` or `1`/`0`)\n- All variable names: `snake_case`\n- Do not reuse variable names across roles without the role prefix\n\n### Secrets Handling\n\n- **Never** store plaintext secrets in inventory files or group_vars committed to source control.\n- Use **Ansible Vault** for sensitive variables. Vault-encrypted files use the `.vault.yml` suffix.\n- Vault passwords are injected at runtime via `--vault-password-file` pointing to a file sourced from a secrets manager, not hardcoded.\n- Rotate vault passwords as part of your key rotation policy (at minimum annually).\n- Alternatively, integrate with HashiCorp Vault using the `community.hashi_vault` collection for dynamic secret injection."
+    },
+    {
+      "id": "ansible-testing",
+      "title": "Ansible Role Testing",
+      "content": "## Ansible Role Testing\n\n### Molecule\n\nEvery role must have a Molecule test scenario:\n\n```\nroles/webserver/\n└── molecule/\n    └── default/\n        ├── molecule.yml\n        ├── converge.yml\n        └── verify.yml\n```\n\n- `converge.yml` — applies the role\n- `verify.yml` — uses `ansible.builtin.assert` or Testinfra to validate the expected state\n- Run `molecule test` in CI for every pull request that modifies a role\n\n### Lint\n\n- Run `ansible-lint` on all playbooks and roles in CI. Treat warnings as errors on `main`.\n- Use `yamllint` to enforce YAML formatting (2-space indent, max line length 160).\n- Validate syntax with `ansible-playbook --syntax-check` for all playbooks.\n\n### CI Pipeline Steps\n\n```\n1. ansible-lint\n2. yamllint\n3. ansible-playbook --syntax-check\n4. molecule test (per role)\n5. Integration test in staging environment\n```"
+    }
+  ]
+}

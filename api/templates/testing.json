@@ -1,0 +1,25 @@
+{
+  "id": "testing",
+  "name": "Testing",
+  "description": "Testing strategies covering unit, integration, and end-to-end tests with coverage expectations.",
+  "category": "quality",
+  "icon": "test-pipe",
+  "tags": ["testing", "jest", "pytest", "coverage", "tdd", "e2e"],
+  "sections": [
+    {
+      "id": "testing-strategy",
+      "title": "Testing Strategy",
+      "content": "## Testing Strategy\n\n### Test Pyramid\n\nFollow the classic test pyramid to keep the suite fast and reliable:\n\n```\n        /\\\n       /e2e\\\n      /------\\\n     /integr- \\\n    / ation    \\\n   /------------\\\n  /  unit tests  \\\n /________________\\\n```\n\n| Layer | Ratio | Tooling | Speed |\n|-------|-------|---------|-------|\n| Unit | ~70% | Jest, pytest, go test | < 1 ms/test |\n| Integration | ~20% | Supertest, pytest + DB | < 100 ms/test |\n| E2E | ~10% | Playwright, Cypress | < 5 s/test |\n\n### When to Write Each Type\n\n- **Unit tests**: for every function, class method, and pure transformation. Mock all I/O.\n- **Integration tests**: for API routes, database queries, and service interactions. Use real (containerised) dependencies.\n- **E2E tests**: for critical user journeys only (login, checkout, core workflows). Not for every feature.\n\n### Testing New Code\n\n- **Every new function must have at least one test.** No PR merges with untested new business logic.\n- Write the test in the same PR as the code — never as a follow-up.\n- Prefer TDD (write the test first) for complex logic. At minimum, write tests immediately after implementation."
+    },
+    {
+      "id": "testing-coverage",
+      "title": "Coverage Requirements",
+      "content": "## Coverage Requirements\n\n### Thresholds\n\n| Metric | Minimum |\n|--------|---------|\n| Line coverage | 80% |\n| Branch coverage | 75% |\n| Function coverage | 80% |\n| Statement coverage | 80% |\n\nThese are **blocking** thresholds — CI fails if coverage drops below them. Configure in `jest.config.js` / `pyproject.toml`.\n\n### What to Measure\n\n- Measure coverage on `src/` only — exclude test files, generated code, migrations, and configuration.\n- Track coverage trends over time. A PR that drops coverage by more than 2% requires explicit justification.\n\n### What Coverage Cannot Tell You\n\n- High coverage does not mean high-quality tests. An assertion-free test achieves 100% coverage and tests nothing.\n- Every `expect()` / `assert` must verify a meaningful behaviour, not just that code runs without throwing.\n- Use mutation testing (`Stryker`, `mutmut`) periodically to validate test effectiveness.\n\n### Exemptions\n\nFiles may be excluded from coverage thresholds when:\n- They contain only type definitions / interfaces (no runtime logic)\n- They are auto-generated (e.g., GraphQL schema types)\n- They are explicitly documented as excluded in a `// istanbul ignore` comment with justification"
+    },
+    {
+      "id": "testing-best-practices",
+      "title": "Test Writing Best Practices",
+      "content": "## Test Writing Best Practices\n\n### Test Structure (AAA)\n\nEvery test must follow the Arrange-Act-Assert pattern:\n\n```js\nit('returns 400 when email is missing', async () => {\n  // Arrange\n  const payload = { password: 'secret123' };\n\n  // Act\n  const response = await request(app).post('/auth/register').send(payload);\n\n  // Assert\n  expect(response.status).toBe(400);\n  expect(response.body.error.code).toBe('VALIDATION_ERROR');\n});\n```\n\n### Naming Conventions\n\n- Test names are sentences: `it('returns the user when the ID is valid')`\n- Use `describe` blocks to group related tests by feature or function\n- Avoid names like `test1`, `should work`, `happy path` — be specific about what is being verified\n\n### Mocking Rules\n\n1. Mock at the boundary of your unit — mock database calls, HTTP clients, and file system access.\n2. Do not mock the module under test itself.\n3. Restore mocks after each test (`afterEach(() => jest.restoreAllMocks())`).\n4. Prefer explicit mock data factories over `any` casts or `as unknown as Type` casts in tests.\n5. For integration tests, use real dependencies (Docker containers via `testcontainers`) rather than mocks.\n\n### Flaky Tests\n\n- A flaky test is a bug. Treat it as `priority: high`.\n- Do not use `retry` configurations to hide flakiness — find and fix the root cause.\n- Avoid `sleep()` / `setTimeout()` in tests; use explicit waits or polling with a timeout."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "linter",
+  "name": "Linting & Code Style",
+  "description": "Linting rules, formatting conventions, code style enforcement, and static analysis guidance.",
+  "category": "quality",
+  "icon": "code",
+  "tags": ["linting", "eslint", "prettier", "style", "formatting"],
+  "sections": [
+    {
+      "id": "linter-tools",
+      "title": "Linting & Formatting Tools",
+      "content": "## Linting & Formatting Tools\n\n### Tool Selection\n\nUse the linting/formatting stack already configured in the repository. Do not introduce a competing tool without team approval.\n\n| Language | Linter | Formatter |\n|----------|--------|----------|\n| JavaScript/TypeScript | ESLint | Prettier |\n| Python | Ruff (or Flake8 + isort) | Black |\n| Go | golangci-lint | gofmt / goimports |\n| Terraform | tflint | terraform fmt |\n| YAML | yamllint | prettier |\n| Markdown | markdownlint | prettier |\n| CSS/SCSS | stylelint | prettier |\n\n### Pre-commit Hooks\n\n- All projects must use pre-commit hooks to enforce formatting and linting before commits reach the remote.\n- Use `husky` + `lint-staged` (JavaScript) or the `pre-commit` framework (Python/polyglot).\n- Hooks must be documented in the README and installed automatically via `npm prepare` or equivalent.\n- Never bypass hooks with `--no-verify` in production-bound branches.\n\n### CI Enforcement\n\n- Linting and formatting checks run on every pull request.\n- Lint failures **block** merge — they are not warnings.\n- Format check: `prettier --check .` (not `--write` in CI — CI should not auto-commit)."
+    },
+    {
+      "id": "linter-rules",
+      "title": "Code Style Rules",
+      "content": "## Code Style Rules\n\n### General Principles\n\n1. **Consistency over personal preference.** Follow the project's established conventions, not your own style.\n2. **Let tools enforce style.** Do not write style comments in code reviews — configure the linter to catch it instead.\n3. **Auto-fix where safe.** Use `eslint --fix` and `prettier --write` in development. Review auto-fix diffs before committing.\n\n### JavaScript / TypeScript\n\n- Enable `strict` mode in TypeScript. Do not use `any` without a `// eslint-disable-next-line` comment explaining why.\n- No `var` — use `const` by default, `let` when reassignment is needed.\n- Prefer `===` over `==` at all times.\n- Maximum function length: 50 lines. Split longer functions.\n- Maximum file length: 400 lines. Split larger files into modules.\n- Imports are sorted: external packages first, internal modules second, relative imports third.\n- No unused variables, imports, or function parameters (prefix intentionally unused params with `_`).\n\n### Python\n\n- Follow PEP 8. Line length: 100 characters (configured in `pyproject.toml`).\n- Use type hints on all public functions.\n- No bare `except:` clauses — always catch a specific exception type.\n- `__init__.py` files should only re-export; no business logic.\n\n### Complexity Limits\n\n- Cyclomatic complexity ≤ 10 per function (enforced by ESLint `complexity` rule or Ruff `C90`).\n- Cognitive complexity ≤ 15 (enforced by `sonar` or `@typescript-eslint/cognitive-complexity`)."
+    },
+    {
+      "id": "linter-suppressions",
+      "title": "Lint Suppression Policy",
+      "content": "## Lint Suppression Policy\n\n### When Suppression Is Acceptable\n\nLint rule suppressions (`eslint-disable`, `# noqa`, `# type: ignore`) are sometimes necessary but must be used responsibly.\n\n### Rules\n\n1. **Suppress the minimum scope.** Prefer a single-line suppression over a block or file-level suppression. Prefer a specific rule name over disabling all rules.\n2. **Always add a justification comment** on the same line or the line above explaining why the suppression is needed.\n3. **Never suppress security-related rules** (`no-eval`, `no-dangerously-set-inner-html`, SQL injection rules, etc.).\n4. **Review suppressions in PRs.** Reviewers must explicitly approve each suppression.\n5. Track the total number of suppressions using a CI metric. Alert if it grows more than 10% in a single PR.\n\n**Acceptable:**\n```js\n// eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy API returns untyped JSON, tracked in #1234\nconst data: any = legacyApi.getData();\n```\n\n**Not acceptable:**\n```js\n/* eslint-disable */\n// ... 200 lines of unsuppressed rules ...\n/* eslint-enable */\n```"
+    }
+  ]
+}

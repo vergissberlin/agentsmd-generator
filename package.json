@@ -1,0 +1,17 @@
+{
+  "name": "agentsmd-generator",
+  "version": "1.0.0",
+  "description": "AGENTS.md file generator web tool",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

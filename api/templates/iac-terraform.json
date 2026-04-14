@@ -1,0 +1,25 @@
+{
+  "id": "iac-terraform",
+  "name": "Infrastructure as Code — Terraform",
+  "description": "Terraform best practices: module structure, state management, naming conventions, and security.",
+  "category": "infrastructure",
+  "icon": "brand-terraform",
+  "tags": ["terraform", "iac", "cloud", "infrastructure", "devops"],
+  "sections": [
+    {
+      "id": "terraform-structure",
+      "title": "Terraform Module Structure",
+      "content": "## Terraform Module Structure\n\n### Repository Layout\n\n```\ninfra/\n├── environments/\n│   ├── dev/\n│   │   ├── main.tf\n│   │   ├── variables.tf\n│   │   ├── outputs.tf\n│   │   └── terraform.tfvars\n│   ├── staging/\n│   └── production/\n└── modules/\n    ├── networking/\n    ├── compute/\n    └── database/\n```\n\n### Module Rules\n\n1. Every reusable resource group must be a module under `modules/`.\n2. Environments reference modules with pinned version tags — never with a relative path that points to a mutable branch.\n3. Each module must contain: `main.tf`, `variables.tf`, `outputs.tf`, and `README.md`.\n4. Keep modules small and focused — a module should manage one logical unit of infrastructure (e.g., a VPC, an ECS service, an RDS cluster).\n5. Do not use `count` and `for_each` on the same resource in the same module.\n\n### Naming Conventions\n\n- Resources: `{project}-{environment}-{resource-type}` — e.g., `myapp-prod-rds`\n- Variables: `snake_case`\n- Outputs: `snake_case`, prefixed with the resource type — e.g., `vpc_id`, `rds_endpoint`\n- Locals: `snake_case`\n- Tags: Always include `Project`, `Environment`, `ManagedBy = \"terraform\"`, and `Owner` tags on every resource.\n\n### Provider Versions\n\nPin provider versions in `required_providers`:\n\n```hcl\nterraform {\n  required_version = \">= 1.6.0\"\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"~> 5.0\"\n    }\n  }\n}\n```"
+    },
+    {
+      "id": "terraform-state",
+      "title": "Terraform State Management",
+      "content": "## Terraform State Management\n\n### Remote State\n\n- All state must be stored remotely (S3 + DynamoDB lock, GCS, Terraform Cloud). **Never commit `.tfstate` files to git.**\n- `.gitignore` must include `*.tfstate`, `*.tfstate.backup`, and `.terraform/`.\n- State buckets must have versioning and server-side encryption enabled.\n- Restrict state bucket access to the CI/CD role and designated administrators only.\n\n### State Operations\n\n- Do not run `terraform apply` locally against production. All production changes go through CI/CD pipelines.\n- Use `terraform state mv` or `moved {}` blocks when refactoring — never delete and re-create resources to fix state drift.\n- Run `terraform plan -out=plan.tfplan` and store the plan as a CI artifact before applying.\n- Use workspaces only for short-lived feature environments. Use separate state files (separate backends) for permanent environments.\n\n### Drift Detection\n\n- Schedule a nightly `terraform plan` run in CI. Alert if the plan is non-empty (drift detected).\n- Tag all manually-created emergency resources with `CreatedManually = \"true\"` and open a ticket to codify them within 48 hours."
+    },
+    {
+      "id": "terraform-security",
+      "title": "Terraform Security Rules",
+      "content": "## Terraform Security Rules\n\n### Secrets & Credentials\n\n- **Never** hardcode secrets, API keys, passwords, or account IDs in `.tf` files or `.tfvars` files committed to source control.\n- Inject secrets at plan/apply time via environment variables (`TF_VAR_*`) sourced from a secrets manager (AWS Secrets Manager, HashiCorp Vault, GitHub Secrets).\n- Use `sensitive = true` on all variable and output blocks that carry secret values to suppress them from plan output.\n\n### Least Privilege\n\n- IAM roles and policies must follow least-privilege: grant only the permissions explicitly required, nothing more.\n- Avoid `\"Action\": \"*\"` or `\"Resource\": \"*\"` in IAM policies. Each must be reviewed and justified.\n- Use resource-based policies over identity-based policies where possible to enforce boundary at the resource level.\n\n### Static Analysis\n\n- Run `tfsec` or `checkov` in CI on every pull request. Fail the build on HIGH and CRITICAL findings.\n- Run `terraform validate` and `tflint` as pre-commit hooks.\n- Enable Terraform Sentinel (or OPA) policies for compliance guardrails in production pipelines.\n\n### Network Security\n\n- No security group should allow `0.0.0.0/0` inbound on ports other than 80/443 without explicit justification in a comment.\n- All inter-service traffic must use private subnets. Public subnets are for load balancers only.\n- Enable VPC Flow Logs on all VPCs."
+    }
+  ]
+}

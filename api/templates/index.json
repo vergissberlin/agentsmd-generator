@@ -1,0 +1,68 @@
+{
+  "templates": [
+    {
+      "id": "frontend",
+      "name": "Frontend Development",
+      "description": "Best practices for frontend development agents including component design, accessibility, and performance.",
+      "category": "development",
+      "icon": "brand-html5",
+      "tags": ["frontend", "javascript", "css", "html", "react", "vue"]
+    },
+    {
+      "id": "backend",
+      "name": "Backend Development",
+      "description": "Guidelines for backend services, API design, error handling, and database interactions.",
+      "category": "development",
+      "icon": "server",
+      "tags": ["backend", "api", "rest", "database", "node", "python"]
+    },
+    {
+      "id": "iac-terraform",
+      "name": "Infrastructure as Code — Terraform",
+      "description": "Terraform best practices: module structure, state management, naming conventions, and security.",
+      "category": "infrastructure",
+      "icon": "brand-terraform",
+      "tags": ["terraform", "iac", "cloud", "infrastructure", "devops"]
+    },
+    {
+      "id": "iac-ansible",
+      "name": "Infrastructure as Code — Ansible",
+      "description": "Ansible playbook conventions, idempotency rules, inventory management, and secrets handling.",
+      "category": "infrastructure",
+      "icon": "adjustments",
+      "tags": ["ansible", "iac", "automation", "devops", "configuration"]
+    },
+    {
+      "id": "documentation",
+      "name": "Documentation",
+      "description": "Documentation standards covering code comments, READMEs, changelogs, and API docs.",
+      "category": "quality",
+      "icon": "file-text",
+      "tags": ["documentation", "readme", "comments", "jsdoc", "openapi"]
+    },
+    {
+      "id": "linter",
+      "name": "Linting & Code Style",
+      "description": "Linting rules, formatting conventions, code style enforcement, and static analysis guidance.",
+      "category": "quality",
+      "icon": "code",
+      "tags": ["linting", "eslint", "prettier", "style", "formatting"]
+    },
+    {
+      "id": "testing",
+      "name": "Testing",
+      "description": "Testing strategies covering unit, integration, and end-to-end tests with coverage expectations.",
+      "category": "quality",
+      "icon": "test-pipe",
+      "tags": ["testing", "jest", "pytest", "coverage", "tdd", "e2e"]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "description": "Security-first development: input validation, secrets management, dependency scanning, and prompt injection prevention.",
+      "category": "security",
+      "icon": "shield-lock",
+      "tags": ["security", "owasp", "secrets", "authentication", "prompt-injection"]
+    }
+  ]
+}
