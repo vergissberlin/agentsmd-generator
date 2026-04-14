@@ -167,35 +167,66 @@
     </div>
   </div>
 
-  <!-- Two-column layout: cards left, preview right -->
-  <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+   <!-- Two-column layout: cards left, preview right -->
+   <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
 
-    <!-- ── Left: template cards ── -->
-    <div class="lg:col-span-3 space-y-6">
+     <!-- ── Left: model selection + template cards ── -->
+     <div class="lg:col-span-3 space-y-6">
 
-      <!-- Search / filter -->
-      <div class="relative animate-slide-up" style="animation-delay:.12s">
+       <!-- Model selection -->
+       <section class="animate-slide-up" style="animation-delay:.08s" aria-label="Model selection">
+         <h2 class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2 mb-2">
+           <i class="ti ti-robot text-brand-500"></i>
+           Choose Model
+         </h2>
+         <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">
+           Pick the primary AI model this AGENTS.md is optimised for. The generator will prepend a model-specific section.
+         </p>
+         <div id="model-selector" class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+           <button type="button" data-model-id="model-openai-gpt-4o"
+             class="model-pill flex items-center gap-2 px-3 py-2 rounded-xl border border-brand-500 bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-200 font-semibold shadow-sm">
+             <i class="ti ti-robot"></i>
+             <span>OpenAI gpt-4o</span>
+           </button>
+           <button type="button" data-model-id="model-openai-o3-mini"
+             class="model-pill flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300">
+             <i class="ti ti-brain"></i>
+             <span>OpenAI o3-mini</span>
+           </button>
+           <button type="button" data-model-id="model-claude-3-7-sonnet"
+             class="model-pill flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300">
+             <i class="ti ti-brand-abstract"></i>
+             <span>Claude 3.7 Sonnet</span>
+           </button>
+         </div>
+       </section>
+
+       <!-- Search / filter -->
+       <div class="relative animate-slide-up" style="animation-delay:.12s">
         <i class="ti ti-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
         <input id="search-input" type="search" placeholder="Search templates…"
           class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 transition" />
       </div>
 
-      <!-- Category filter pills -->
-      <div id="category-filters" class="flex flex-wrap gap-2 animate-slide-up" style="animation-delay:.15s" role="group" aria-label="Filter by category">
-        <button data-cat="all" class="cat-pill active px-3 py-1 rounded-full text-xs font-semibold border transition-all">All</button>
-        <button data-cat="development" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
-          <i class="ti ti-code mr-1"></i>Development
-        </button>
-        <button data-cat="infrastructure" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
-          <i class="ti ti-cloud mr-1"></i>Infrastructure
-        </button>
-        <button data-cat="quality" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
-          <i class="ti ti-star mr-1"></i>Quality
-        </button>
-        <button data-cat="security" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
-          <i class="ti ti-shield mr-1"></i>Security
-        </button>
-      </div>
+       <!-- Category filter pills -->
+       <div id="category-filters" class="flex flex-wrap gap-2 animate-slide-up" style="animation-delay:.15s" role="group" aria-label="Filter by category">
+         <button data-cat="all" class="cat-pill active px-3 py-1 rounded-full text-xs font-semibold border transition-all">All</button>
+         <button data-cat="model" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+           <i class="ti ti-robot mr-1"></i>Model
+         </button>
+         <button data-cat="development" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+           <i class="ti ti-code mr-1"></i>Development
+         </button>
+         <button data-cat="infrastructure" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+           <i class="ti ti-cloud mr-1"></i>Infrastructure
+         </button>
+         <button data-cat="quality" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+           <i class="ti ti-star mr-1"></i>Quality
+         </button>
+         <button data-cat="security" class="cat-pill px-3 py-1 rounded-full text-xs font-semibold border transition-all">
+           <i class="ti ti-shield mr-1"></i>Security
+         </button>
+       </div>
 
       <!-- Template grid -->
       <div id="template-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4" role="list" aria-label="Template blocks">
@@ -419,9 +450,13 @@
   let previewRaw = false;
 
   function updatePreview() {
-    const blocks = AgentsMDLib.getSelectedBlocks();
-    const md = AgentsMDLib.generateAgentsMD(blocks);
-    const isEmpty = blocks.length === 0;
+    const templateBlocks = AgentsMDLib.getSelectedBlocks();
+    const allBlocks = [];
+    if (selectedModelTemplate) allBlocks.push(selectedModelTemplate);
+    allBlocks.push(...templateBlocks);
+
+    const md = AgentsMDLib.generateAgentsMD(allBlocks);
+    const isEmpty = allBlocks.length === 0 || (!selectedModelTemplate && templateBlocks.length === 0);
 
     document.getElementById('preview-empty').style.display = isEmpty ? 'flex' : 'none';
     document.getElementById('md-preview').style.display = (!isEmpty && !previewRaw) ? 'block' : 'none';
@@ -430,13 +465,13 @@
     document.getElementById('md-preview').innerHTML = renderMarkdown(md);
     document.getElementById('raw-preview').textContent = md;
 
-    const hasContent = blocks.length > 0;
+    const hasContent = allBlocks.length > 0;
     document.getElementById('btn-copy').disabled = !hasContent;
     document.getElementById('btn-download').disabled = !hasContent;
 
     // Update step indicators
-    updateStepIndicators(blocks.length);
-    updateSelectionBar(blocks.length);
+    updateStepIndicators(templateBlocks.length);
+    updateSelectionBar(templateBlocks.length);
   }
 
   document.getElementById('preview-toggle').addEventListener('click', function() {
@@ -482,12 +517,14 @@
 
   /* ──────────────────────────────── Category icons map ───────────────────── */
   const CAT_ICONS = {
+    model:          'ti-robot',
     development:    'ti-code',
     infrastructure: 'ti-cloud',
     quality:        'ti-star',
     security:       'ti-shield-lock',
   };
   const CAT_COLORS = {
+    model:          'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-300',
     development:    'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
     infrastructure: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
     quality:        'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400',
@@ -498,6 +535,19 @@
   let allTemplates = [];
   let activeCategory = 'all';
   let searchQuery = '';
+  let modelTemplatesById = {};
+  let selectedModelId = 'model-openai-gpt-4o';
+  let selectedModelTemplate = null;
+
+  async function loadModelTemplate(id) {
+    if (!id) return null;
+    try {
+      return await AgentsMDLib.loadTemplate(id);
+    } catch (err) {
+      console.error('Failed to load model template', id, err);
+      return null;
+    }
+  }
 
   function renderCards() {
     const grid = document.getElementById('template-grid');
@@ -519,7 +569,7 @@
     grid.innerHTML = filtered.map((t, i) => {
       const selected = AgentsMDLib.isSelected(t.id);
       const catColor = CAT_COLORS[t.category] || 'bg-slate-50 text-slate-500';
-      const iconClass = `ti-${t.icon || 'file'}`;
+       const iconClass = `ti-${(CAT_ICONS[t.category] || t.icon) || 'file'}`;
       const delay = `${i * 40}ms`;
       return `
         <div role="listitem" class="template-card${selected ? ' selected' : ''} bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4 cursor-pointer shadow-sm hover:shadow-md animate-slide-up focus-within:ring-2 focus-within:ring-brand-400"
@@ -601,6 +651,38 @@
   // Set initial pill styles
   document.querySelector('.cat-pill[data-cat="all"]').classList.add('bg-brand-600','text-white','border-brand-600');
 
+  /* ──────────────────────────────── Model selector ────────────────────────── */
+  const modelSelector = document.getElementById('model-selector');
+  if (modelSelector) {
+    modelSelector.addEventListener('click', e => {
+      const pill = e.target.closest('.model-pill');
+      if (!pill) return;
+      const id = pill.dataset.modelId;
+      selectedModelId = id;
+      // Load full model template (with sections) when switching
+      loadModelTemplate(id).then(tpl => {
+        if (tpl && selectedModelId === id) {
+          selectedModelTemplate = tpl;
+          updatePreview();
+        }
+      });
+
+      modelSelector.querySelectorAll('.model-pill').forEach(p => {
+        const active = p === pill;
+        p.classList.toggle('border-brand-500', active);
+        p.classList.toggle('bg-brand-50', active);
+        p.classList.toggle('dark:bg-brand-900/40', active);
+        p.classList.toggle('text-brand-700', active);
+        p.classList.toggle('dark:text-brand-200', active);
+        if (!active) {
+          p.classList.add('border-slate-200','dark:border-slate-700','bg-white','dark:bg-slate-900','text-slate-600','dark:text-slate-300');
+        } else {
+          p.classList.remove('border-slate-200','dark:border-slate-700','bg-white','dark:bg-slate-900','text-slate-600','dark:text-slate-300');
+        }
+      });
+    });
+  }
+
   /* ──────────────────────────────── Search ────────────────────────────────── */
   let searchTimer;
   document.getElementById('search-input').addEventListener('input', e => {
@@ -615,9 +697,17 @@
   async function loadTemplates() {
     try {
       const index = await AgentsMDLib.loadAllTemplates();
-      allTemplates = index.templates || [];
+      allTemplates = (index.templates || []).filter(t => t.category !== 'model');
+      const modelTemplates = (index.templates || []).filter(t => t.category === 'model');
+      modelTemplatesById = Object.fromEntries(modelTemplates.map(t => [t.id, t]));
+      // preload currently selected model template (full JSON with sections)
+      if (!modelTemplatesById[selectedModelId] && modelTemplates.length > 0) {
+        selectedModelId = modelTemplates[0].id;
+      }
+      selectedModelTemplate = await loadModelTemplate(selectedModelId);
       document.getElementById('loading-indicator').remove();
       renderCards();
+      updatePreview();
     } catch (err) {
       document.getElementById('loading-indicator').innerHTML =
         '<i class="ti ti-alert-circle text-red-400 text-2xl mb-2 block"></i>Failed to load templates. Are you running a local server?';
@@ -636,7 +726,10 @@
   });
 
   document.getElementById('btn-copy').addEventListener('click', async () => {
-    const md = AgentsMDLib.generateAgentsMD(AgentsMDLib.getSelectedBlocks());
+    const blocks = [];
+    if (selectedModelTemplate) blocks.push(selectedModelTemplate);
+    blocks.push(...AgentsMDLib.getSelectedBlocks());
+    const md = AgentsMDLib.generateAgentsMD(blocks);
     try {
       await navigator.clipboard.writeText(md);
       showToast('Copied to clipboard!');
@@ -646,7 +739,10 @@
   });
 
   document.getElementById('btn-download').addEventListener('click', () => {
-    const md = AgentsMDLib.generateAgentsMD(AgentsMDLib.getSelectedBlocks());
+    const blocks = [];
+    if (selectedModelTemplate) blocks.push(selectedModelTemplate);
+    blocks.push(...AgentsMDLib.getSelectedBlocks());
+    const md = AgentsMDLib.generateAgentsMD(blocks);
     downloadFile('AGENTS.md', md);
     showToast('Downloaded AGENTS.md');
   });

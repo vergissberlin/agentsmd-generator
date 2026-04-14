@@ -7,6 +7,9 @@ const TEMPLATES_DIR = path.join(__dirname, '../api/templates');
 const EXAMPLES_DIR = path.join(__dirname, '../api/examples');
 
 const EXPECTED_TEMPLATE_IDS = [
+  'model-openai-gpt-4o',
+  'model-openai-o3-mini',
+  'model-claude-3-7-sonnet',
   'frontend',
   'backend',
   'iac-terraform',

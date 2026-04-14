@@ -1,6 +1,30 @@
 {
   "templates": [
     {
+      "id": "model-openai-gpt-4o",
+      "name": "Model — OpenAI gpt-4o",
+      "description": "Default coding agent: pragmatic, incremental code changes and clear explanations.",
+      "category": "model",
+      "icon": "robot",
+      "tags": ["model", "openai", "gpt-4o", "default"]
+    },
+    {
+      "id": "model-openai-o3-mini",
+      "name": "Model — OpenAI o3-mini",
+      "description": "Reasoning-heavy model for complex refactors, architecture work, and debugging.",
+      "category": "model",
+      "icon": "brain",
+      "tags": ["model", "openai", "o3-mini", "reasoning"]
+    },
+    {
+      "id": "model-claude-3-7-sonnet",
+      "name": "Model — Claude 3.7 Sonnet",
+      "description": "Review and refinement model focused on correctness and code review.",
+      "category": "model",
+      "icon": "brand-abstract",
+      "tags": ["model", "claude", "sonnet", "review"]
+    },
+    {
       "id": "frontend",
       "name": "Frontend Development",
       "description": "Best practices for frontend development agents including component design, accessibility, and performance.",

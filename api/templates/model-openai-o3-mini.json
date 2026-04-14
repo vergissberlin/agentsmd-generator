@@ -1,0 +1,21 @@
+{
+  "id": "model-openai-o3-mini",
+  "name": "Model Guidelines — OpenAI o3-mini",
+  "description": "Reasoning-focused instructions for using OpenAI o3-mini on complex or ambiguous engineering tasks.",
+  "provider": "openai",
+  "category": "model",
+  "icon": "brain",
+  "tags": ["openai", "o3-mini", "reasoning", "analysis"],
+  "sections": [
+    {
+      "id": "model-openai-o3-mini-reasoning",
+      "title": "OpenAI o3-mini — When To Use",
+      "content": "## OpenAI o3-mini — When To Use\n\nUse **o3-mini** for tasks that benefit from deeper reasoning or multi-step planning, for example:\n\n- Non-trivial refactors across multiple modules or layers.\n- Designing or migrating architectures (APIs, services, data models).\n- Debugging issues that require **hypothesis generation and refinement**.\n- Analysing performance issues, race conditions, or complex state flows.\n\nFor straightforward edits (small bug fixes, copy changes, simple components), prefer the **default coding model** instead."
+    },
+    {
+      "id": "model-openai-o3-mini-working-style",
+      "title": "OpenAI o3-mini — Working Style",
+      "content": "## OpenAI o3-mini — Working Style\n\n### Reasoning Expectations\n\n- Produce a **short, structured plan** before making large or cross-cutting changes.\n- Keep internal reasoning **concise and focused on code**; avoid lengthy general essays.\n- Explicitly call out **assumptions** and where they may be wrong.\n\n### Code Changes\n\n- Even when a plan is complex, implement it as a **series of small, reviewable steps**.\n- After major changes, include a brief **self-review** describing what was changed and how to verify it.\n- Prefer **maintainability and clarity** over micro-optimisations unless performance is the primary goal.\n\n### Hand-off To Simpler Models\n\n- When detailed reasoning is complete, summarise the approach so that a simpler coding model (e.g. gpt-4o) can execute follow-up tasks without re-deriving the plan."
+    }
+  ]
+}
