@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/vergissberlin/agentsmd-generator/compare/agentsmd-generator-v1.1.1...agentsmd-generator-v1.2.0) (2026-04-14)
+
+
+### Features
+
+* **templates:** add 10 cloud-focused template blocks ([c2e28bc](https://github.com/vergissberlin/agentsmd-generator/commit/c2e28bc615cc6996370710bf8ba93ce4af5d47fe))
+
 ## [1.1.1](https://github.com/vergissberlin/agentsmd-generator/compare/agentsmd-generator-v1.1.0...agentsmd-generator-v1.1.1) (2026-04-14)
 
 
