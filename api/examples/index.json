@@ -1,0 +1,25 @@
+{
+  "examples": [
+    {
+      "id": "fullstack-app",
+      "name": "Full-Stack Application",
+      "description": "Complete AGENTS.md for a modern full-stack web application with frontend, backend, testing, and documentation.",
+      "templates": ["frontend", "backend", "testing", "documentation"],
+      "tags": ["fullstack", "web", "react", "node"]
+    },
+    {
+      "id": "devops-pipeline",
+      "name": "DevOps Pipeline",
+      "description": "Infrastructure and automation focused AGENTS.md for teams managing cloud infrastructure with Terraform and Ansible.",
+      "templates": ["iac-terraform", "iac-ansible", "security", "documentation"],
+      "tags": ["devops", "infrastructure", "terraform", "ansible", "cloud"]
+    },
+    {
+      "id": "secure-api",
+      "name": "Secure API Service",
+      "description": "Security-first AGENTS.md for backend API services with strict validation, secrets management, and quality gates.",
+      "templates": ["backend", "security", "testing", "linter"],
+      "tags": ["api", "security", "backend", "quality"]
+    }
+  ]
+}

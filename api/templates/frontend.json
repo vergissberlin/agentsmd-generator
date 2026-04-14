@@ -1,0 +1,25 @@
+{
+  "id": "frontend",
+  "name": "Frontend Development",
+  "description": "Best practices for frontend development agents including component design, accessibility, and performance.",
+  "category": "development",
+  "icon": "brand-html5",
+  "tags": ["frontend", "javascript", "css", "html", "react", "vue"],
+  "sections": [
+    {
+      "id": "frontend-overview",
+      "title": "Frontend Development Guidelines",
+      "content": "## Frontend Development Guidelines\n\nThis section governs all frontend code produced or modified by AI agents in this repository.\n\n### Technology Stack\n\n- **Framework**: Follow the framework already in use (React, Vue, Svelte, etc.). Do not introduce a new framework without explicit approval.\n- **Styling**: Use the existing CSS methodology (CSS Modules, Tailwind, styled-components). Keep styling co-located with components.\n- **State Management**: Prefer local component state unless cross-component sharing is required. Use the established global state solution (Redux, Zustand, Pinia).\n- **Build Tool**: Do not change the build configuration (Vite, Webpack, Parcel) unless specifically asked.\n\n### Component Design Principles\n\n1. **Single Responsibility**: Each component must do one thing well. Split large components (>300 lines) into smaller ones.\n2. **Props Validation**: Always define prop types (TypeScript interfaces, PropTypes, or Vue props validation).\n3. **Controlled vs Uncontrolled**: Prefer controlled components for form elements.\n4. **Composition over Inheritance**: Use composition patterns (render props, slots, compound components).\n5. **No God Components**: Avoid components that manage both data-fetching logic and UI rendering — separate the concerns.\n\n### File & Naming Conventions\n\n- Component files: `PascalCase.tsx` / `PascalCase.vue`\n- Utility files: `camelCase.ts`\n- Test files: `ComponentName.test.tsx` co-located with the component\n- CSS modules: `ComponentName.module.css`\n- Keep related files together in a feature folder, not scattered across type-based folders."
+    },
+    {
+      "id": "frontend-accessibility",
+      "title": "Accessibility (a11y) Requirements",
+      "content": "## Accessibility (a11y) Requirements\n\nAll UI produced by agents **must** meet WCAG 2.1 AA standards.\n\n### Required Practices\n\n- **Semantic HTML**: Use the correct element for the purpose (`<button>` for actions, `<a>` for navigation, heading hierarchy `h1`→`h6`).\n- **ARIA labels**: Add `aria-label` or `aria-labelledby` to interactive elements that lack visible text labels.\n- **Keyboard Navigation**: Every interactive element must be reachable and operable via keyboard. Do not suppress `outline` without providing an alternative focus indicator.\n- **Images**: All `<img>` tags must have descriptive `alt` text. Decorative images use `alt=\"\"`.\n- **Color Contrast**: Text must have at least 4.5:1 contrast ratio against its background (3:1 for large text).\n- **Form Labels**: Every `<input>`, `<select>`, and `<textarea>` must be associated with a `<label>` via `for`/`id` or `aria-labelledby`.\n- **Error Messages**: Form validation errors must be announced to screen readers using `aria-live` regions or `role=\"alert\"`.\n- **Focus Management**: After modal dialogs open, move focus inside. After they close, return focus to the trigger element.\n\n### Automated Checks\n\nRun `axe-core` or `eslint-plugin-jsx-a11y` as part of CI. Do not merge code that introduces new accessibility violations."
+    },
+    {
+      "id": "frontend-performance",
+      "title": "Frontend Performance Standards",
+      "content": "## Frontend Performance Standards\n\n### Core Web Vitals Targets\n\n| Metric | Target |\n|--------|--------|\n| LCP (Largest Contentful Paint) | < 2.5 s |\n| FID / INP (Interaction to Next Paint) | < 200 ms |\n| CLS (Cumulative Layout Shift) | < 0.1 |\n| FCP (First Contentful Paint) | < 1.8 s |\n| TTFB (Time to First Byte) | < 600 ms |\n\n### Agent Rules\n\n1. **Code Splitting**: Use dynamic `import()` / `React.lazy()` for routes and heavy components not needed on initial load.\n2. **Image Optimization**: Always specify `width` and `height` on `<img>` elements. Use modern formats (WebP, AVIF) where supported. Use `loading=\"lazy\"` for below-the-fold images.\n3. **Bundle Size Awareness**: Before adding a new npm dependency, check its bundle size (bundlephobia.com). Prefer lighter alternatives or native APIs.\n4. **Avoid Layout Thrashing**: Do not read and write DOM layout properties in the same synchronous block. Batch DOM reads, then writes.\n5. **Memoization**: Use `React.memo`, `useMemo`, and `useCallback` only when a measurable performance benefit exists — not by default.\n6. **No Synchronous Heavy Operations on Main Thread**: Offload expensive computation to Web Workers or break it into chunks with `requestIdleCallback`.\n7. **Font Loading**: Use `font-display: swap` and preload critical fonts to prevent invisible text (FOIT)."
+    }
+  ]
+}
