@@ -57,6 +57,86 @@
       "tags": ["ansible", "iac", "automation", "devops", "configuration"]
     },
     {
+      "id": "cloud-engineering",
+      "name": "Cloud Engineering",
+      "description": "Cloud platform engineering standards for architecture, environments, governance, and operational readiness.",
+      "category": "infrastructure",
+      "icon": "cloud",
+      "tags": ["cloud", "engineering", "platform", "governance", "operations"]
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes",
+      "description": "Kubernetes delivery standards for workloads, manifests, security controls, and day-2 operations.",
+      "category": "infrastructure",
+      "icon": "brand-kubernetes",
+      "tags": ["kubernetes", "k8s", "containers", "platform", "operations"]
+    },
+    {
+      "id": "cicd-pipeline",
+      "name": "CI/CD Pipeline",
+      "description": "Pipeline conventions for build, test, release governance, and deployment safety checks.",
+      "category": "infrastructure",
+      "icon": "git-branch",
+      "tags": ["cicd", "pipeline", "deployment", "automation", "devops"]
+    },
+    {
+      "id": "platform-engineering",
+      "name": "Platform Engineering",
+      "description": "Internal developer platform patterns: golden paths, service templates, and self-service operations.",
+      "category": "infrastructure",
+      "icon": "stack-2",
+      "tags": ["platform", "developer-experience", "idp", "self-service", "cloud"]
+    },
+    {
+      "id": "cost-optimization",
+      "name": "Cloud Cost Optimization",
+      "description": "FinOps-aligned controls for budgeting, rightsizing, and cost-aware architecture decisions.",
+      "category": "infrastructure",
+      "icon": "cash",
+      "tags": ["finops", "cost", "cloud", "optimization", "budget"]
+    },
+    {
+      "id": "cloud-security",
+      "name": "Cloud Security",
+      "description": "Cloud-native security baseline for identity, network controls, workload hardening, and response workflows.",
+      "category": "security",
+      "icon": "shield-lock",
+      "tags": ["cloud", "security", "iam", "network", "hardening"]
+    },
+    {
+      "id": "observability",
+      "name": "Observability",
+      "description": "Standards for logs, metrics, traces, alert quality, and actionable dashboards.",
+      "category": "quality",
+      "icon": "chart-line",
+      "tags": ["observability", "monitoring", "logging", "tracing", "sre"]
+    },
+    {
+      "id": "sre-operations",
+      "name": "SRE Operations",
+      "description": "Reliability engineering practices around SLOs, incident response, and postmortem-driven improvement.",
+      "category": "quality",
+      "icon": "lifebuoy",
+      "tags": ["sre", "reliability", "slo", "incident", "operations"]
+    },
+    {
+      "id": "data-engineering",
+      "name": "Data Engineering",
+      "description": "Guidelines for resilient data pipelines, data contracts, and quality enforcement in production.",
+      "category": "development",
+      "icon": "database",
+      "tags": ["data", "pipelines", "etl", "quality", "analytics"]
+    },
+    {
+      "id": "release-management",
+      "name": "Release Management",
+      "description": "Release controls for risk assessment, approvals, progressive rollouts, and rollback procedures.",
+      "category": "quality",
+      "icon": "rocket",
+      "tags": ["release", "change-management", "deployment", "rollback", "quality"]
+    },
+    {
       "id": "documentation",
       "name": "Documentation",
       "description": "Documentation standards covering code comments, READMEs, changelogs, and API docs.",

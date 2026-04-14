@@ -1,0 +1,20 @@
+{
+  "id": "kubernetes",
+  "name": "Kubernetes",
+  "description": "Kubernetes delivery standards for workloads, manifests, security controls, and day-2 operations.",
+  "category": "infrastructure",
+  "icon": "brand-kubernetes",
+  "tags": ["kubernetes", "k8s", "containers", "platform", "operations"],
+  "sections": [
+    {
+      "id": "kubernetes-workload-standards",
+      "title": "Kubernetes Workload Standards",
+      "content": "## Kubernetes Workload Standards\n\nAll workloads must be deployed as declarative manifests and follow predictable runtime behavior across environments.\n\n### Deployment Rules\n\n1. Use `Deployment` for stateless services, `StatefulSet` for stateful services, and `CronJob` for scheduled tasks.\n2. Every workload must define CPU and memory requests and limits.\n3. Configure readiness and liveness probes for all long-running services.\n4. Use rolling updates with bounded surge and unavailable settings to avoid downtime.\n5. Keep container images immutable and pinned to digest or immutable version tags.\n\n### Configuration\n\n- Put non-sensitive configuration in `ConfigMap` and secrets in `Secret` resources.\n- Do not embed environment-specific values directly in workload YAML.\n- Namespace naming must follow `{team}-{service}-{env}` for clear ownership and isolation."
+    },
+    {
+      "id": "kubernetes-security-operations",
+      "title": "Kubernetes Security and Operations",
+      "content": "## Kubernetes Security and Operations\n\n### Security Baseline\n\n- Enforce least privilege using dedicated service accounts per workload.\n- Set `runAsNonRoot`, read-only root filesystem where possible, and drop unnecessary Linux capabilities.\n- Use network policies to restrict east-west traffic by default.\n- Block privileged containers and host namespace access in admission policies.\n\n### Operational Practices\n\n1. Use horizontal pod autoscaling for variable traffic services with validated target metrics.\n2. Centralize logs and metrics for every namespace and expose runbook links in alerts.\n3. Keep cluster upgrades incremental and test API deprecations before production rollout.\n4. Validate manifests with policy checks in CI prior to deployment."
+    }
+  ]
+}

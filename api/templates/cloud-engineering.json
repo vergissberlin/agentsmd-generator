@@ -1,0 +1,20 @@
+{
+  "id": "cloud-engineering",
+  "name": "Cloud Engineering",
+  "description": "Cloud platform engineering standards for architecture, environments, governance, and operational readiness.",
+  "category": "infrastructure",
+  "icon": "cloud",
+  "tags": ["cloud", "engineering", "platform", "governance", "operations"],
+  "sections": [
+    {
+      "id": "cloud-engineering-foundations",
+      "title": "Cloud Engineering Foundations",
+      "content": "## Cloud Engineering Foundations\n\nThis section defines baseline rules for engineering cloud systems that are reliable, secure, and maintainable.\n\n### Core Principles\n\n1. Build for failure: assume zones, services, and dependencies can fail at any time.\n2. Prefer managed services over self-managed infrastructure when it improves reliability and security posture.\n3. Keep environments reproducible through Infrastructure as Code and immutable deployment artifacts.\n4. Design for least privilege across users, workloads, pipelines, and service-to-service communication.\n5. Default to private networking and explicit egress rules instead of open internet access.\n\n### Environment Strategy\n\n- Maintain separate development, staging, and production environments with clear promotion gates.\n- Enforce naming standards: `{org}-{app}-{env}-{resource}`.\n- Apply mandatory tags to every resource: `Owner`, `Service`, `Environment`, `CostCenter`, `ManagedBy`.\n- All environment changes must be traceable to pull requests and pipeline runs."
+    },
+    {
+      "id": "cloud-engineering-operational-readiness",
+      "title": "Operational Readiness for Cloud Services",
+      "content": "## Operational Readiness for Cloud Services\n\nCloud workloads are considered production-ready only when operations and recovery practices are defined and tested.\n\n### Required Controls\n\n- Define service SLOs (availability, latency, error rate) before launch.\n- Configure centralized logging, metrics, and tracing with service-level dashboards.\n- Create runbooks for common incidents, including dependency outage and degraded performance scenarios.\n- Verify backup and restore workflows at least quarterly with documented outcomes.\n- Implement autoscaling thresholds with limits to avoid runaway cost and instability.\n\n### Deployment Safety\n\n1. Use progressive delivery (canary, rolling, or blue/green) for critical services.\n2. Every deployment must have an automated rollback trigger and manual rollback command documented.\n3. Block production rollout if smoke tests, health checks, or policy gates fail.\n4. Keep change windows and on-call ownership explicit for high-risk releases."
+    }
+  ]
+}

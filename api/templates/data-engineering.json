@@ -1,0 +1,20 @@
+{
+  "id": "data-engineering",
+  "name": "Data Engineering",
+  "description": "Guidelines for resilient data pipelines, data contracts, and quality enforcement in production.",
+  "category": "development",
+  "icon": "database",
+  "tags": ["data", "pipelines", "etl", "quality", "analytics"],
+  "sections": [
+    {
+      "id": "data-engineering-pipeline-design",
+      "title": "Data Pipeline Design Standards",
+      "content": "## Data Pipeline Design Standards\n\n### Pipeline Principles\n\n1. Design pipelines for idempotency so retries do not duplicate or corrupt data.\n2. Separate ingestion, transformation, and serving layers with explicit contracts.\n3. Prefer append-only event histories for traceability, with derived materializations downstream.\n4. Version schemas and transformation logic to support backward-compatible changes.\n\n### Runtime Rules\n\n- Every pipeline must expose success/failure metrics and processing latency.\n- Configure dead-letter handling for malformed records and downstream write failures.\n- Use checkpointing or watermarking for stream and incremental batch workloads."
+    },
+    {
+      "id": "data-engineering-quality-governance",
+      "title": "Data Quality and Governance",
+      "content": "## Data Quality and Governance\n\n### Data Quality Controls\n\n- Define data contracts between producers and consumers for critical datasets.\n- Validate freshness, completeness, uniqueness, and schema conformance in automated checks.\n- Fail fast on contract-breaking changes and alert responsible owning teams.\n\n### Governance Practices\n\n1. Classify datasets by sensitivity and apply access controls accordingly.\n2. Track lineage from source to consumption layer for auditability and incident response.\n3. Retain raw and curated data according to legal and business retention policies.\n4. Document ownership, SLA, and recovery procedures for each production dataset."
+    }
+  ]
+}

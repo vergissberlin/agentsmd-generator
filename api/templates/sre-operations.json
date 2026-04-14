@@ -1,0 +1,20 @@
+{
+  "id": "sre-operations",
+  "name": "SRE Operations",
+  "description": "Reliability engineering practices around SLOs, incident response, and postmortem-driven improvement.",
+  "category": "quality",
+  "icon": "lifebuoy",
+  "tags": ["sre", "reliability", "slo", "incident", "operations"],
+  "sections": [
+    {
+      "id": "sre-slo-error-budget",
+      "title": "SLO and Error Budget Management",
+      "content": "## SLO and Error Budget Management\n\n### Reliability Objectives\n\n1. Define service level objectives for availability and latency based on user journeys.\n2. Track error budget burn rates and use them to prioritize reliability work.\n3. Establish service tiers with clear reliability expectations and support models.\n4. Block risky feature rollouts when error budget is exhausted.\n\n### Operational Cadence\n\n- Review SLO performance weekly with service owners.\n- Maintain dashboards showing short- and long-window burn rates.\n- Align escalation policies with service criticality and business impact."
+    },
+    {
+      "id": "sre-incident-postmortem",
+      "title": "Incident Response and Postmortems",
+      "content": "## Incident Response and Postmortems\n\n### Incident Lifecycle\n\n- Use a declared incident commander for every Sev1 and Sev2 event.\n- Keep real-time status updates with timestamps, impact, and mitigation progress.\n- Capture all decisions and commands in an incident timeline for later review.\n\n### Postmortem Standards\n\n1. Publish blameless postmortems within five business days for major incidents.\n2. Include root cause, contributing factors, detection gaps, and customer impact.\n3. Track corrective actions with owners and due dates until verified complete.\n4. Feed recurring failure patterns into platform and architecture backlog planning."
+    }
+  ]
+}

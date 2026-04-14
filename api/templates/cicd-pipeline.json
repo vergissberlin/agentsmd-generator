@@ -1,0 +1,20 @@
+{
+  "id": "cicd-pipeline",
+  "name": "CI/CD Pipeline",
+  "description": "Pipeline conventions for build, test, release governance, and deployment safety checks.",
+  "category": "infrastructure",
+  "icon": "git-branch",
+  "tags": ["cicd", "pipeline", "deployment", "automation", "devops"],
+  "sections": [
+    {
+      "id": "cicd-quality-gates",
+      "title": "CI/CD Quality Gates",
+      "content": "## CI/CD Quality Gates\n\nEvery pipeline run must provide deterministic validation before software is eligible for release.\n\n### Mandatory Stages\n\n1. Dependency install with lockfile validation.\n2. Static checks (lint, type checks, policy checks).\n3. Unit and integration tests with failure on regression.\n4. Build artifact generation with version metadata.\n5. Security scans for dependencies and container images.\n\n### Gate Rules\n\n- Do not allow deployment jobs to run when any upstream quality gate fails.\n- Protect main branch merges with required checks and non-bypassable status policies.\n- Keep pipeline definitions versioned in repository and code-reviewed like application code."
+    },
+    {
+      "id": "cicd-deployment-safety",
+      "title": "Deployment Safety and Traceability",
+      "content": "## Deployment Safety and Traceability\n\n### Deployment Controls\n\n- Deploy artifacts produced by CI only; do not rebuild in deploy stage.\n- Enforce environment promotion flow: development -> staging -> production.\n- Require manual approval for high-risk or production deployments.\n- Run post-deploy smoke checks and rollback automatically when health checks fail.\n\n### Traceability Requirements\n\n1. Record commit SHA, artifact version, environment, and initiator for every deployment.\n2. Keep release notes linked to the deployment run and included change set.\n3. Persist pipeline logs long enough for incident analysis and compliance needs.\n4. Use short-lived credentials via workload identity or OIDC, never long-lived static keys."
+    }
+  ]
+}

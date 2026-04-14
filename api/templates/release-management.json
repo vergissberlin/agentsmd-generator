@@ -1,0 +1,20 @@
+{
+  "id": "release-management",
+  "name": "Release Management",
+  "description": "Release controls for risk assessment, approvals, progressive rollouts, and rollback procedures.",
+  "category": "quality",
+  "icon": "rocket",
+  "tags": ["release", "change-management", "deployment", "rollback", "quality"],
+  "sections": [
+    {
+      "id": "release-management-planning",
+      "title": "Release Planning and Risk Controls",
+      "content": "## Release Planning and Risk Controls\n\n### Release Planning Rules\n\n1. Every release must include scope, risk level, rollback plan, and owner sign-off.\n2. Group changes by compatibility and business impact, not by developer convenience.\n3. Use feature flags for risky or partially complete capabilities.\n4. Freeze high-risk changes during critical business periods unless approved as emergency.\n\n### Change Control\n\n- Document dependencies and migration prerequisites before release approval.\n- Require peer review and automated checks for all release candidates.\n- Keep release notes aligned to user impact and operational changes."
+    },
+    {
+      "id": "release-management-rollout",
+      "title": "Rollout and Rollback Procedures",
+      "content": "## Rollout and Rollback Procedures\n\n### Rollout Practices\n\n- Use progressive rollout stages with health verification at each stage.\n- Validate business and technical KPIs immediately after deployment.\n- Keep communication channels active for engineering, support, and stakeholders during critical releases.\n\n### Rollback Readiness\n\n1. Test rollback steps in staging before production release windows.\n2. Keep database migration strategy compatible with rollback whenever possible.\n3. Automate rollback triggers for severe error rate, latency, or availability regressions.\n4. Record release outcomes and feed lessons learned into subsequent release checklists."
+    }
+  ]
+}

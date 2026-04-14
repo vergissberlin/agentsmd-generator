@@ -1,0 +1,20 @@
+{
+  "id": "cloud-security",
+  "name": "Cloud Security",
+  "description": "Cloud-native security baseline for identity, network controls, workload hardening, and response workflows.",
+  "category": "security",
+  "icon": "shield-lock",
+  "tags": ["cloud", "security", "iam", "network", "hardening"],
+  "sections": [
+    {
+      "id": "cloud-security-identity",
+      "title": "Cloud Identity and Access Controls",
+      "content": "## Cloud Identity and Access Controls\n\n### Access Baseline\n\n1. Enforce single sign-on and multi-factor authentication for all human access.\n2. Use short-lived credentials and federated identity for CI/CD and workloads.\n3. Grant permissions using least privilege roles tied to job function and environment scope.\n4. Deny wildcard actions and resources in production policies unless formally approved.\n\n### Identity Hygiene\n\n- Rotate access keys and secrets on schedule; remove dormant identities promptly.\n- Use break-glass access accounts with strict logging, approvals, and expiration.\n- Review high-privilege role assignments at least monthly."
+    },
+    {
+      "id": "cloud-security-network-runtime",
+      "title": "Network and Runtime Security",
+      "content": "## Network and Runtime Security\n\n### Network Controls\n\n- Keep workloads private by default and expose internet ingress only through controlled edges.\n- Restrict security group and firewall rules to required ports and known sources.\n- Encrypt traffic in transit and at rest for all production data paths.\n\n### Runtime and Detection\n\n1. Apply hardened base images and patching policies with maximum allowed age thresholds.\n2. Continuously scan infrastructure and container images for critical vulnerabilities.\n3. Forward audit logs to centralized immutable storage for investigation and compliance.\n4. Maintain incident response playbooks for credential compromise, data exposure, and service takeover scenarios."
+    }
+  ]
+}

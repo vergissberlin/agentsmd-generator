@@ -1,0 +1,20 @@
+{
+  "id": "observability",
+  "name": "Observability",
+  "description": "Standards for logs, metrics, traces, alert quality, and actionable dashboards.",
+  "category": "quality",
+  "icon": "chart-line",
+  "tags": ["observability", "monitoring", "logging", "tracing", "sre"],
+  "sections": [
+    {
+      "id": "observability-telemetry-standards",
+      "title": "Telemetry Standards",
+      "content": "## Telemetry Standards\n\nObservability must enable fast diagnosis without relying on tribal knowledge.\n\n### Required Signals\n\n1. Emit structured logs with consistent fields: `timestamp`, `service`, `environment`, `level`, `traceId`, `message`.\n2. Publish service-level metrics for latency, traffic, errors, and saturation.\n3. Instrument distributed traces for request paths crossing service boundaries.\n4. Ensure correlation identifiers propagate through synchronous and asynchronous calls.\n\n### Data Quality\n\n- Avoid high-cardinality labels that create runaway storage and query costs.\n- Define log retention and sampling policies by environment and data sensitivity.\n- Redact secrets and personal data before telemetry export."
+    },
+    {
+      "id": "observability-alerting-practices",
+      "title": "Alerting and Dashboard Practices",
+      "content": "## Alerting and Dashboard Practices\n\n### Alerting Rules\n\n- Alert on symptoms impacting users and business outcomes, not only infrastructure internals.\n- Every production alert must include severity, ownership, runbook link, and clear remediation steps.\n- Configure noise controls (deduplication, grouping, quiet windows) to reduce alert fatigue.\n\n### Dashboard Rules\n\n1. Build role-specific dashboards: service health, dependency health, and business KPI overlays.\n2. Keep default time ranges and filters meaningful for incident triage.\n3. Review and prune stale or ignored alerts monthly.\n4. Validate alert thresholds after incidents and major architecture changes."
+    }
+  ]
+}

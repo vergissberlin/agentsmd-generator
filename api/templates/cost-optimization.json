@@ -1,0 +1,20 @@
+{
+  "id": "cost-optimization",
+  "name": "Cloud Cost Optimization",
+  "description": "FinOps-aligned controls for budgeting, rightsizing, and cost-aware architecture decisions.",
+  "category": "infrastructure",
+  "icon": "cash",
+  "tags": ["finops", "cost", "cloud", "optimization", "budget"],
+  "sections": [
+    {
+      "id": "cost-optimization-budgeting",
+      "title": "Cost Governance and Budgeting",
+      "content": "## Cost Governance and Budgeting\n\nCloud cost must be managed as an engineering responsibility with clear ownership and measurable controls.\n\n### Governance Baseline\n\n1. Define budget thresholds per environment and service with automated alerting.\n2. Require mandatory cost tags: `Service`, `Team`, `Environment`, `CostCenter`, `Owner`.\n3. Track forecast versus actual spend weekly and review exceptions in engineering operations.\n4. Block untagged resource creation in production through policy controls.\n\n### Review Cadence\n\n- Conduct monthly cost reviews with engineering and finance stakeholders.\n- Capture top cost drivers, action items, and expected savings timelines.\n- Keep decision records when architectural trade-offs increase spend."
+    },
+    {
+      "id": "cost-optimization-rightsizing",
+      "title": "Rightsizing and Consumption Efficiency",
+      "content": "## Rightsizing and Consumption Efficiency\n\n### Optimization Practices\n\n- Use autoscaling with guardrails before increasing fixed capacity.\n- Rightsize compute and database tiers based on observed utilization, not peak assumptions alone.\n- Prefer reserved or savings plans for stable baseline workloads after utilization is validated.\n- Automatically stop or scale down non-production resources outside business hours where feasible.\n\n### Engineering Rules\n\n1. Include cost impact as part of architecture and pull request reviews for major changes.\n2. Set data retention and log sampling policies to avoid unbounded storage growth.\n3. Decommission orphaned resources within one sprint after ownership is lost.\n4. Validate cost impact after each optimization and record realized savings."
+    }
+  ]
+}

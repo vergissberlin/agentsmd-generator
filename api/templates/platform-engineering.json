@@ -1,0 +1,20 @@
+{
+  "id": "platform-engineering",
+  "name": "Platform Engineering",
+  "description": "Internal developer platform patterns: golden paths, service templates, and self-service operations.",
+  "category": "infrastructure",
+  "icon": "stack-2",
+  "tags": ["platform", "developer-experience", "idp", "self-service", "cloud"],
+  "sections": [
+    {
+      "id": "platform-golden-paths",
+      "title": "Platform Golden Paths",
+      "content": "## Platform Golden Paths\n\nGolden paths provide opinionated defaults that reduce delivery risk while preserving team autonomy.\n\n### Platform Product Rules\n\n1. Provide reusable service templates for common service types (API, worker, frontend, event consumer).\n2. Every template must include baseline CI, observability, security controls, and deployment workflow.\n3. Keep template interfaces stable and versioned; publish migration notes for breaking changes.\n4. Offer paved-road choices first, and document when teams may deviate with approval criteria.\n\n### Developer Experience\n\n- Standardize bootstrap commands for local development and test execution.\n- Expose platform capabilities through self-service interfaces (CLI, portal, or API).\n- Track developer experience metrics such as lead time, failed deployments, and setup duration."
+    },
+    {
+      "id": "platform-ownership-governance",
+      "title": "Platform Ownership and Governance",
+      "content": "## Platform Ownership and Governance\n\n### Ownership Model\n\n- Assign clear ownership for each platform capability and document escalation paths.\n- Define service level objectives for platform components consumed by product teams.\n- Keep platform documentation actionable with examples and troubleshooting playbooks.\n\n### Governance Controls\n\n1. Enforce policy-as-code for identity, networking, and deployment standards.\n2. Review platform changes through architecture and security checks proportional to risk.\n3. Avoid hard tenant coupling; design multi-team boundaries with isolation by default.\n4. Deprecate legacy paths with timelines, migration tooling, and communication plans."
+    }
+  ]
+}
